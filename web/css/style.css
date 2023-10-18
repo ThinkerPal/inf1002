@@ -1,0 +1,145 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+.space-map {
+    width: 100%;
+}
+
+h1 {
+    margin-bottom: 10px;
+}
+
+.me-2 {
+    width: 350px!important;
+}
+
+@media (max-width: 991px) {
+    .d-flex {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.sort-advanced {
+    display: flex; 
+    position: relative; 
+    justify-content: flex-start; 
+    gap: 5px;
+}
+
+.end-filter {
+    display: flex; 
+    justify-content: center; 
+    gap: 5px; position: relative; 
+    margin-top: 10px;
+}
+
+/** Stats.html CSS*/
+
+@media (min-width: 992px) {
+.navbar-collapse-custom{
+    display: flex!important;
+    flex-basis: auto;
+    flex-direction: row-reverse;
+}
+}
+
+.stats-container {
+    display: flex;
+    margin: auto;
+    height: 800px;
+    width: 1000px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 50px;
+    justify-content: center;
+    align-content: center;
+}
+
+.stats-container *{
+    display: flex;
+    width: 500px;
+    height: 300px;
+    border-radius: 10px;
+    background-color: lightslategrey;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Custom CSS for the sidebar */
+#sidebar {
+    padding-left: 1vw;
+    margin-top: 4.5vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: -250px;
+    height: 100%;
+    background-color: #B5B4FF; /* Updated color */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    transition: left .3s ease; /* Added transition for smooth animation */
+}
+
+#sidebar.show {
+    left: 0;
+}
+
+#sidebar .header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    border-left: 1vw;
+    text-align: left;
+    width: "100%";
+}
+
+#sidebar .header h4 {
+    margin: 0;
+}
+
+#closeSidebar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block; /* Display the label as a block element */
+    margin-bottom: 5px; /* Add some spacing between label and input */
+}
+
+.form-check-label {
+    margin-left: 25px; /* Indent the checkboxes */
+}
+
+/* Toggle button visibility */
+#toggleButton {
+    display: none; /* Initially hidden */
+}
+
+/* Remove backdrop fade show */
+.offcanvas-backdrop {
+    display: none !important;
+}
+
+/* Media query to show/hide toggle button */
+@media (max-width: 768px) {
+    #sidebarToggle {
+        display: block; /* Show toggle button on smaller screens */
+        position: fixed;
+        top: 10px;
+        left: 10px;
+        z-index: 1000;
+    }
+}

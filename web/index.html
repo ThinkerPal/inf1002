@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResaleView: An INF1002 Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=API_KEY&libraries=visualization&callback=initMap" async defer></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.5.1/axios.min.js"></script>
+    <script defer src="js/index.js"></script>
+    <script defer src="js/map.js"></script>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar" class="offcanvas">
+        <button class="btn btn-danger btn-sm" id="closeSidebar">X</button>
+        <div class="header">
+            <h4>Search Options</h4>
+        </div>
+        <div class="options" style="display: flex; flex-direction: column;align-items: flex-start; flex-wrap: nowrap;">
+            <div class="form-group">
+                <label for="transactionYear">Transaction Year</label>
+                <input type="range" class="form-control-range" id="transactionYear">
+            </div>
+            <div class="form-group">
+                <label>Flat Type</label>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="2rm">
+                    <label class="form-check-label" for="2rm">Select All</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="3rm">
+                    <label class="form-check-label" for="3rm">3rm</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="4rm">
+                    <label class="form-check-label" for="4rm">4rm</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="5rm">
+                    <label class="form-check-label" for="5rm">5rm</label>
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="execFlat">
+                    <label class="form-check-label" for="execFlat">Executive Flat</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="leaseRemaining">Lease Remaining</label>
+                <input type="range" class="form-control-range" id="leaseRemaining">
+            </div>
+        </div>
+    </div>
+    <div class="d-flex flex-column space-map">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary sticky-top">
+            <div class="container-fluid">
+                <button class="btn btn-light" type="button" id="sidebarToggle" data-bs-toggle="offcanvas" data-bs-target="#sidebar" aria-expanded="false" data-bs-backdrop="false">▶️</button>
+                <a class="navbar-brand" href="#">ResaleView</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="stats.html">Stats</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="about.html">About</a>
+                        </li>
+                    </ul>
+                    <div style="width: 30%; display:flex" class="">
+                        <button class="costHeatmap">Toggle Heatmap</button>
+                        <label for="town-selector" style="display: flex; padding-right: 20px; align-items: center;">Town:</label>
+                        <select class="form-select" id="town-selector" aria-label="Select a Town">
+                        </select>
+                    </div>
+                    <!-- <form class="d-flex" role="search">
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="searchbox-home">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Advanced
+                            </button>
+                            <ul class="dropdown-menu" style="background-color: darkslategrey; color: white; padding: 5px;">
+                                <li>
+                                    <h6>Sort</h6>
+                                    <div class="sort-advanced">
+                                        <button class="btn btn-dark ascending" type="button">Ascending⬆️</button>
+                                        <button class="btn btn-dark descending" type="button">Descending⬇️</button>
+                                    </div>
+                                    <h6 style="margin-top: 10px; position: relative;">Filter</h6>
+                                    <input class="advanced-search" type="search" placeholder="Search" aria-label="Search" id="advanced-search" style="width: 100%;">
+                                    <ul class="location-checkbox" style="display: flex; flex-direction: column; margin-top: 10px; list-style-type: none;">
+                                        <li>
+                                            <input type="checkbox" name="select-all" id="select-all"> <label for="select-all">SELECT ALL</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="amk" id="ang-mo-kio"> <label for="ang-mo-kio">ANG MO KIO</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="bedok" id="bedok"> <label for="bedok">BEDOK</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="bishan" id="bishan"> <label for="bishan">BISHAN</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="batok" id="bukit-batok"> <label for="bukit-batok">BUKIT BATOK</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="merah" id="bukit-merah"> <label for="bukit-merah">BUKIT MERAH</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="panjang" id="bukit-panjang"> <label for="bukit-panjang">BUKIT PANJANG</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="timah" id="bukit-timah"> <label for="bukit-timah">BUKIT TIMAH</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="central" id="central"> <label for="central">CENTRAL AREA</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="cck" id="choa-chu-kang"> <label for="choa-chu-kang">CHOA CHU KANG</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="clementi" id="clementi"> <label for="clementi">CLEMENTI</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="geylang" id="geylang"> <label for="geylang">GEYLANG</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="hougang" id="hougang"> <label for="hougang">HOUGANG</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="je" id="jurong-east"> <label for="jurong-east">JURONG EAST</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="jw" id="jurong-west"> <label for="jurong-west">JURONG WEST</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="kallang" id="kallang"> <label for="kallang">KALLANG/WHAMPOA</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="lim-chu-kang" id="lim-chu-kang"> <label for="lim-chu-kang">LIM CHU KANG</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="marinep" id="marine-parade"> <label for="marine-parade">MARINE PARADE</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="pasir-ris" id="pasir-ris"> <label for="pasir-ris">PASIR RIS</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="punggol" id="punggol"> <label for="punggol">PUNGGOL</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="queenstown" id="queenstown"> <label for="queenstown">QUEENSTOWN</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="sembawang" id="sembawang"> <label for="sembawang">SEMBAWANG</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="sengkang" id="sengkang"> <label for="sengkang">SENGKANG</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="serangoon" id="serangoon"> <label for="serangoon">SERANGOON</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="tampines" id="tampines"> <label for="tampines">TAMPINES</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="toa-payoh" id="toa-payoh"> <label for="toa-payoh">TOA PAYOH</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="woodlands" id="woodlands"> <label for="woodlands">WOODLANDS</label>
+                                        </li>
+                                        <li>
+                                            <input type="checkbox" name="yishun" id="yishun"> <label for="yishun">YISHUN</label>
+                                        </li>
+                                    </ul>
+                                    <h6 style="margin-top: 10px; position: relative;">Update</h6>
+                                    <div class="end-filter">
+                                        <button class="btn btn-dark apply-filter" type="button" style="width: 121.92px;">Apply Filter</button>
+                                        <button class="btn btn-dark clear-filter" type="button" style="width: 121.92px;">Clear Filter</button>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="btn btn-success home-1" onclick="showLocation()" id="button-go-home" type="button" style="margin-right: 500px; margin-left: 10px;">Go</button>
+                    </form> -->
+                </div>
+            </div>
+        </nav>
+    <!-- Add a div for displaying the map -->
+        <div id="map" class="content flex-grow" style="display: flex; height: 94vh; width: 100%;"></div>
+    </div>
+</body>
+</html>
+
